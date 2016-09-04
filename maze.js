@@ -7,40 +7,25 @@ var height = process.argv[3];
 
 function generateMaze(width, height) {
   var maze = [];
-  for (var count = height; height > 0; height--) {
-    var mazeString = '';
-    for (var counter= width; counter > 0; counter--) {
-      var randomNum = Math.random();
-      if (randomNum <= 0.7) {
-        mazeString = mazeString + wall;
-      } else {
-        mazeString = mazeString + empty; 
-      }
-    }
-    maze.push(mazeString);
-  }
-  return maze;
-}
-
-function mainPath(width, height) {
-  var maze = [];
   var mazeString = wall.repeat(width);
   for (var i = 0; i < height; i++) {
     maze.push(mazeString); 
   } 
+  prettyPrint(mainPath(maze, width, height));
+}
 
+function mainPath(maze, width, height) {
   var ranNum = Math.floor(Math.random() * 100) % width;
   var firstMazeString = maze[0];
   firstMazeString = firstMazeString.substring(0, ranNum - 1) + empty + firstMazeString.substring(ranNum, firstMazeString.length);
   maze[0] = firstMazeString;
-  console.log('math: ' + ranNum)
 
-  prettyPrint(maze);
   surroundingValidPos(ranNum - 1, 0);
   canCarve(ranNum - 1, 0);
   for (var i = 1; i < maze.length; i++) {
     mazeString = maze[i];
   }
+  return maze;
 }
 
 function surroundingValidPos(x, y) { //first time pass in 0,3 for example 
@@ -63,24 +48,22 @@ function canCarve(x, y) {
     return move.dir === 'up';
   });
   var downValid = moves.find(function(move) {
-    console.log(move.dir);
     return move.dir === 'down'
   });
   var leftValid = moves.find(function(move) {
-    console.log(move.dir);
     return move.dir === 'left'
   });
   var rightValid = moves.find(function(move) {
-    console.log(move.dir);
     return move.dir === 'right'
   });
   return downValid !== undefined && upValid !== undefined && leftValid !== undefined && rightValid !== undefined;
 }
+
 
 function prettyPrint(maze) {
   for (var counter = 0; counter < maze.length; counter++) {
     console.log(maze[counter]);
   }
 }
-mainPath(20,20);
 // prettyPrint(generateMaze(width, height));
+generateMaze(width, height);
