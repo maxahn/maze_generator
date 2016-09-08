@@ -1,5 +1,5 @@
 var WALL = '\u9641';
-var EMPTY  = ' ';
+var EMPTY  = '\u5182';
 var width = process.argv[2];  //default if there is no input 
 var height = process.argv[3];
 
@@ -20,32 +20,50 @@ function generateEmpty(width, height) {
 }  
 
 function carvePath(x, y) {
-  if (completePath && ratio > 0.5) {
-     
+  if (completePath) {//ratio > 0.5) {
+    return;     
   } else {
-    maze[y].substring(x, x + 1, EMPTY);
+    //console.log('blah');
+    maze[y] = maze[y].substring(0, x) + EMPTY + maze[y].substring(x + 1, width + 1);
     wallUnits--;
     emptyUnits++;
     //var dir = Math.Random();    //down: 0 <= dir < 0.25, left: 0.25 <= dir < 0.5, up: 0.5 <= dir < 0.75, right 0.75 <= dir < 1
-    var moves = validMoves(x, y);
-
+    var vm = validMove(x,y);
+    console.log(vm);
+    console.log('x: ' +  vm[0] + ' y: ' + vm[1]);
+    if (vm[0] === 0 || vm[1] === 0) {
+      completePath = true;
+    } else {
+      carvePath(vm[0], vm[1]);
+    }
   }
 }
 
-function validMoves(x, y) { //returns validMoves from given coordinates. An empty string, or out of bounds space is not a valid move. 
-  var dir = Math.Random(); 
+function validMove(x, y) { //returns validMoves from given coordinates. An empty string, or out of bounds space is not a valid move. 
+  var dir = Math.Random; 
+  var move;
   //var moves = [];
-  if (dir < 0.25 && y + 1 < height && maze[y + 1].substr(x, 1) === WALL) {    //down
-    return { x: x, y: y + 1 };
-  } else if (dir < 0.5 && x - 1 >= 0 && maze[y].substr(x - 1, 1) === WALL) {   //left
-    return { x: x - 1, y: y };
-  } else if (dir < 0.75 && y - 1 >= 0 && maze[y - 1].substr(x, 1) === WALL) {   //up
-    return {x: x, y: y - 1};// moves.push('up');   
-  } else if (dir < 1 && x + 1 < width && maze[y].substr(x + 1, 1) === WALL){    //right
-    return {x: x + 1, y: y}; //moves.push('right');   
-  } else {
-    return undefined;
+  var counter = 4;
+  while (counter > 0 || move) {
+    if (dir < 0.25 && withinBounds(x, y + 1)) {    //down
+      move = { x: x, y: y + 1 };
+    } 
+    if (dir < 0.5 && withinBounds(x - 1, y)) {   //left
+      move = { x: x - 1, y: y }; 
+    }
+    if (dir < 0.75 && withinBounds(x, y - 1)) {    //up
+      move = { x: x, y: y - 1 };
+    } 
+    if (dir < 1 && withinBounds(x + 1, y)) { //right
+      move = { x: x + 1, y };
+    }
+    counter--;
   }
+  return move;
+}
+
+function withinBounds(x, y) {
+  return x >= 0 && x < width && y >= 0 && y < height && maze[y].substr(x, 1) === WALL;
 }
 
 function printMaze() {
@@ -56,6 +74,7 @@ function printMaze() {
 
 function init() {
   generateEmpty(width, height);
+  carvePath(10, 0);
   printMaze();
 }
 
