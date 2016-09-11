@@ -31,30 +31,31 @@ function carvePath(x, y) { //carves path from first position
   freq++;
   if (freq % 3 === 0) {
     branchPoints.push({x: x, y: y});
-  }
-  if (!completePath && branchPoints.length > 0) {
-    if (lastStep(y + 1)) {
+  } 
+  if (!completePath || branchPoints.length > 0) {
+    if (lastStep(y + 1) && !completePath) {
       carve(x, y + 1);
       carve(x, y);
       completePath = true;
-    } else {
-      carve(x,y);
-      freq++;
-      if (freq % 3 === 0) {
-        branchPoints.push({x: x, y: y});
-      }
-      var vMoves = validMoves(x,y);
-      if (vMoves.length > 0) {
-        var ran = getRandomInt(0, vMoves.length - 1);
-        var m = vMoves[ran];
-        carvePath(m.x, m.y);
-      } else {
-        var branch = branchPoints.pop();
-        if (branchPoints.length > 0) {
-          carvePath(branch.x, branch.y);       
-        } 
-      } 
+    } 
+
+    carve(x,y);
+    freq++;
+    if (freq % 3 === 0) {
+      branchPoints.push({x: x, y: y});
     }
+    var vMoves = validMoves(x,y);
+    if (vMoves.length > 0) {
+      var ran = getRandomInt(0, vMoves.length - 1);
+      var m = vMoves[ran];
+      carvePath(m.x, m.y);
+    } else {
+      var branch = branchPoints.pop();
+      if (branchPoints.length > 0) {
+        carvePath(branch.x, branch.y);       
+      } 
+    } 
+    
   }
   // if (lastStep(y+1)) {
   //   carve(x, y);
