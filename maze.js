@@ -1,5 +1,5 @@
-var WALL = '\u9641';
-var EMPTY  = '\u5182';
+var WALL = '\u56c1';//'\u9641';
+var EMPTY  = '\u56d7';//'\u5182';
 var width = process.argv[2];  //default if there is no input 
 var height = process.argv[3];
 
@@ -28,41 +28,55 @@ function firstStep() {
 var branchPoints = [];
 var freq = 0; 
 function carvePath(x, y) { //carves path from first position
-  if (lastStep(y)) {
-    carve(x,y);  
-  } else {
-    carve(x,y);
-    freq++;
-    if (freq % 3 === 0) {
-      branchPoints.push({x: x, y: y});
-    }
-    var vMoves = validMoves(x,y);
-    if (vMoves.length > 0) {
-      var ran = getRandomInt(0, vMoves.length - 1);
-      var m = vMoves[ran];
-      carvePath(m.x, m.y);
-    } else {
-      var branch = branchPoints.pop();
-      if (branchPoints.length > 0) {
-        carvePath(branch.x, branch.y);       
-      } 
-    } 
+  freq++;
+  if (freq % 3 === 0) {
+    branchPoints.push({x: x, y: y});
   }
-  // var curr = { x: x, y: 1}
-  // while (!completePath) {
-  //   var vMoves = validMoves(curr.x, curr.y); 
-  //   if (vMoves.length > 0) {
-  //     var ran = getRandomInt(0, vMoves.length - 1);//there will be some issues when there are zero vMoves
-  //     // console.log('vMoves.length: ' + vMoves.length);
-  //     // console.log('random num: ' + ran);
-  //     var dir = vMoves[ran];
-  //     carve(dir.x, dir.y);
-  //     curr.x = dir.x;
-  //     curr.y = dir.y;
-  //   } else {
-  //     carve(dir.x, dir.y + 1);
+  if (!completePath && branchPoints.length > 0) {
+    if (lastStep(y + 1)) {
+      carve(x, y + 1);
+      carve(x, y);
+      completePath = true;
+    } else {
+      carve(x,y);
+      freq++;
+      if (freq % 3 === 0) {
+        branchPoints.push({x: x, y: y});
+      }
+      var vMoves = validMoves(x,y);
+      if (vMoves.length > 0) {
+        var ran = getRandomInt(0, vMoves.length - 1);
+        var m = vMoves[ran];
+        carvePath(m.x, m.y);
+      } else {
+        var branch = branchPoints.pop();
+        if (branchPoints.length > 0) {
+          carvePath(branch.x, branch.y);       
+        } 
+      } 
+    }
+  }
+  // if (lastStep(y+1)) {
+  //   carve(x, y);
+  //   carve(x,y+1);  
+  // } else {
+  //   carve(x,y);
+  //   freq++;
+  //   if (freq % 3 === 0) {
+  //     branchPoints.push({x: x, y: y});
   //   }
-  // }
+  //   var vMoves = validMoves(x,y);
+  //   if (vMoves.length > 0) {
+  //     var ran = getRandomInt(0, vMoves.length - 1);
+  //     var m = vMoves[ran];
+  //     carvePath(m.x, m.y);
+  //   } else {
+  //     var branch = branchPoints.pop();
+  //     if (branchPoints.length > 0) {
+  //       carvePath(branch.x, branch.y);       
+  //     } 
+  //   } 
+  //}
 }
 function carve(x,y) {
   maze[y] = maze[y].substring(0, x) + EMPTY + maze[y].substring(x + 1, maze.length + 1);
@@ -161,6 +175,7 @@ function printMaze() {
 function init() {
   generateEmpty(width, height);
   var firstX = firstStep();
+  branchPoints.push({x: firstStep(), y: 1});
   carvePath(firstX, 1);
   printMaze();
 }
