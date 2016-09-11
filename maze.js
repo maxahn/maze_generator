@@ -38,7 +38,6 @@ function carvePath(x, y) { //carves path from first position
       carve(x, y);
       completePath = true;
     } 
-
     carve(x,y);
     freq++;
     if (freq % 3 === 0) {
@@ -176,7 +175,7 @@ function printMaze() {
 function init() {
   generateEmpty(width, height);
   var firstX = firstStep();
-  branchPoints.push({x: firstStep(), y: 1});
+  branchPoints.push({x: firstX, y: 1});
   carvePath(firstX, 1);
   printMaze();
 }
