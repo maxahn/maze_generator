@@ -56,27 +56,6 @@ function carvePath(x, y) { //carves path from first position
     } 
     
   }
-  // if (lastStep(y+1)) {
-  //   carve(x, y);
-  //   carve(x,y+1);  
-  // } else {
-  //   carve(x,y);
-  //   freq++;
-  //   if (freq % 3 === 0) {
-  //     branchPoints.push({x: x, y: y});
-  //   }
-  //   var vMoves = validMoves(x,y);
-  //   if (vMoves.length > 0) {
-  //     var ran = getRandomInt(0, vMoves.length - 1);
-  //     var m = vMoves[ran];
-  //     carvePath(m.x, m.y);
-  //   } else {
-  //     var branch = branchPoints.pop();
-  //     if (branchPoints.length > 0) {
-  //       carvePath(branch.x, branch.y);       
-  //     } 
-  //   } 
-  //}
 }
 function carve(x,y) {
   maze[y] = maze[y].substring(0, x) + EMPTY + maze[y].substring(x + 1, maze.length + 1);
@@ -179,5 +158,5 @@ function init() {
   carvePath(firstX, 1);
   printMaze();
 }
-
+module.validMoves = validMoves();
 init();
