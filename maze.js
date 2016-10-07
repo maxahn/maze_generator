@@ -146,9 +146,10 @@ function withinBounds(x, y) {
 }
 
 function printMaze() {
-  for (var counter = 0; counter < maze.length; counter++) {
-    console.log(maze[counter]);
-  }
+  //console.log(maze);
+   for (var counter = 0; counter < maze.length; counter++) {
+     console.log(maze[counter]);
+   }
 }
 
 function init() {
@@ -156,7 +157,8 @@ function init() {
   var firstX = firstStep();
   branchPoints.push({x: firstX, y: 1});
   carvePath(firstX, 1);
-  printMaze();
+  //printMaze();
 }
-module.validMoves = validMoves();
-init();
+exports.validMoves = validMoves;
+exports.printMaze = printMaze;
+//init();
