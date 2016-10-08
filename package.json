@@ -1,0 +1,24 @@
+{
+  "name": "maze_generation",
+  "version": "1.0.0",
+  "description": "random maze generator with node",
+  "main": "init.js",
+  "dependencies": {
+    "argv": "^0.0.2",
+    "node": "^0.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxahn/maze_generator.git"
+  },
+  "author": "Max Ahn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maxahn/maze_generator/issues"
+  },
+  "homepage": "https://github.com/maxahn/maze_generator#readme"
+}
